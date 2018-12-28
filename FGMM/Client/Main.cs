@@ -9,7 +9,6 @@ using FGMM.SDK.Client.Diagnostics;
 using FGMM.SDK.Core.RPC.Events;
 using FGMM.Client.Services;
 using CitizenFX.Core;
-using CitizenFX.Core.Native;
 
 namespace FGMM.Client
 {

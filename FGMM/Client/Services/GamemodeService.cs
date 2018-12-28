@@ -1,4 +1,9 @@
-﻿using FGMM.SDK.Client.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using FGMM.SDK.Client.Diagnostics;
 using FGMM.SDK.Client.Events;
 using FGMM.SDK.Client.Gamemodes;
 using FGMM.SDK.Client.RPC;
@@ -6,11 +11,9 @@ using FGMM.SDK.Client.Services;
 using FGMM.SDK.Core.Diagnostics;
 using FGMM.SDK.Core.Models;
 using FGMM.SDK.Core.RPC.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
+using CitizenFX.Core;
+using CitizenFX.Core.Native;
+using CitizenFX.Core.UI;
 
 namespace FGMM.Client.Services
 {
@@ -64,7 +67,15 @@ namespace FGMM.Client.Services
             {
                 Gamemode.Stop();
                 Gamemode = null;
-            }               
+            }
+
+            Game.Player.CanControlCharacter = false;
+            Game.PlayerPed.IsPositionFrozen = true;
+            API.ClearPedTasksImmediately(Game.PlayerPed.Handle);
+            Screen.Hud.IsRadarVisible = false;
+            Screen.Hud.IsVisible = false;
+            API.DisplayHud(false);
+            Screen.Fading.FadeOut(2000);
         }
 
         private async Task<string> RequestGamemode()
