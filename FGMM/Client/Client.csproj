@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A74A8BEF-9D8C-4D7C-8856-C721EC32060F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>FGMM.Client</RootNamespace>
+    <AssemblyName>FGMM.Client.net</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CitizenFX.Core">
+      <HintPath>..\..\..\Users\Amir\AppData\Local\FiveM\FiveM.app\citizen\clr2\lib\mono\4.5\CitizenFX.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Events\TickManager.cs" />
+    <Compile Include="Models\Pools.cs" />
+    <Compile Include="Services\DisableAIService.cs" />
+    <Compile Include="Services\GameEventsService.cs" />
+    <Compile Include="Services\GamemodeService.cs" />
+    <Compile Include="Events\EventManager.cs" />
+    <Compile Include="Main.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RPC\InboundMessage.cs" />
+    <Compile Include="RPC\OutboundMessage.cs" />
+    <Compile Include="RPC\Rpc.cs" />
+    <Compile Include="RPC\RpcEvent.cs" />
+    <Compile Include="RPC\RpcHandler.cs" />
+    <Compile Include="RPC\RpcManager.cs" />
+    <Compile Include="RPC\RpcTrigger.cs" />
+    <Compile Include="RPC\ServerHandler.cs" />
+    <Compile Include="Services\TeamSelectionService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SDK\Client\Client.csproj">
+      <Project>{b97195db-3e12-4215-96a8-8829f8d6bd79}</Project>
+      <Name>Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SDK\Core\Core.csproj">
+      <Project>{9776ad50-0754-4bb3-a5dd-77c31ae85773}</Project>
+      <Name>Core</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy /Y "$(TargetDir)$(TargetName).dll" "C:\FGMM\resources\fgmm"</PostBuildEvent>
+  </PropertyGroup>
+</Project>
