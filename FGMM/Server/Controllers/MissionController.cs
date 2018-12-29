@@ -75,6 +75,7 @@ namespace FGMM.Server.Controllers
 
         public async Task StopMission()
         {
+            Logger.Debug("StopMission called");
             if (CurrentGamemode == null)
                 return;
 
@@ -91,6 +92,7 @@ namespace FGMM.Server.Controllers
 
         public void StartNextMission()
         {
+            Logger.Debug("StartNextMission called");
             // Pick a mission
             string mission = Missions.Pop();
             string missionGamemode = GetMissionGamemode(mission);

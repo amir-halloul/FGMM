@@ -55,12 +55,13 @@ namespace FGMM.Client.Services
             }
             while (string.IsNullOrEmpty(CurrentGamemode));
 
-            Gamemode = GetGamemode(CurrentGamemode);         
+            Gamemode = GetGamemode(CurrentGamemode);
             Events.Raise(ClientEvents.StartTeamSelection, await Rpc.Event(ClientEvents.RequestTeamSelection).Request<SelectionData>());
         }
 
         private async void OnMissionEnded(IRpcEvent rpc)
         {
+            Logger.Debug("Ending mission...");
             if(Gamemode == null)
                 Logger.Warning("The client tried to end a non existing gamemode!");
             else

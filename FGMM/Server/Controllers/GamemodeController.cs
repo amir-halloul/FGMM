@@ -25,9 +25,22 @@ namespace FGMM.Server.Controllers
             Events.On<IGamemode>(ServerEvents.MissionStarted, OnGamemodeChanged);
             Rpc.Event(ClientEvents.RequestTeamSelection).On(OnTeamSelectionRequested);
             Rpc.Event(ClientEvents.JoinTeamRequest).On<int>(OnJoinTeamRequested);
-            Rpc.Event(ClientEvents.PlayerDied).On<int>(OnPlayerDied);
+            Rpc.Event("baseevents:onPlayerDied").OnRaw(new Action<Player, int, List<object>>(OnPlayerDied));
+            Rpc.Event("baseevents:onPlayerKilled").OnRaw(new Action<Player, int, ExpandoObject>(OnPlayerKilled));
             Rpc.Event(ClientEvents.PlayerDropped).OnRaw(new Action<Player, string, CallbackDelegate>(OnPlayerDropped));
             Rpc.Event(ClientEvents.PlayerConnecting).OnRaw(new Action<Player, string, CallbackDelegate, ExpandoObject>(OnPlayerConnecting));
+        }
+
+        private void OnPlayerDied([FromSource]Player player, int killerType, List<object> coords)
+        {
+            Logger.Debug($"onPlayerDied recieved and forwarded to {CurrentGamemode?.Mission.Gamemode} gamemode");
+            CurrentGamemode?.HandleDeath(player, null);
+        }
+
+        private void OnPlayerKilled([FromSource]Player player, int killerId, ExpandoObject data)
+        {
+            Logger.Debug($"onPlayerKilled recieved and forwarded to {CurrentGamemode?.Mission.Gamemode} gamemode");
+            CurrentGamemode?.HandleDeath(player, new PlayerList()[killerId]);
         }
 
         private void OnPlayerConnecting([FromSource]Player player, string playerName, CallbackDelegate drop, ExpandoObject callbacks)
@@ -39,17 +52,6 @@ namespace FGMM.Server.Controllers
         {
             Logger.Info($"Player {player.Name} ({player.Handle}) disconnected. Reason: {disconnectMessage}");
             Rpc.Event(ClientEvents.CleanupPeds).Trigger();
-        }
-
-
-        private void OnPlayerDied(IRpcEvent rpc, int killerId)
-        {
-            Player player = new PlayerList()[rpc.Client.Handle];
-            Player killer = null;           
-            if (killerId != -1)
-                killer = new PlayerList()[killerId];
-            Logger.Debug($"Death event recieved and forwarded to {CurrentGamemode?.Mission.Gamemode} gamemode");
-            CurrentGamemode?.HandleDeath(player, killer);
         }
 
         private void OnJoinTeamRequested(IRpcEvent rpc, int teamId)

@@ -21,6 +21,7 @@ namespace FGMM.Client.Services
         private const int PlayerCount = 64;
 
         private bool IsDead;
+        private DateTime DeathTime = DateTime.MinValue;
 
         public GameEventsService(ILogger logger, IEventManager events, IRpcHandler rpc, ITickManager Tick) : base(logger, events, rpc)
         {
@@ -30,9 +31,10 @@ namespace FGMM.Client.Services
 
         private async Task DeathTick()
         {
-            if(API.IsPedDeadOrDying(Game.PlayerPed.Handle, true) && !IsDead)
+            if(API.IsPedDeadOrDying(Game.PlayerPed.Handle, true) && !IsDead && (DateTime.Now - DeathTime).Seconds > 3)
             {
                 IsDead = true;
+                DeathTime = DateTime.Now;
                 Logger.Debug("Death event detected!");
                 uint weapon = 0;
                 int killerEntity = API.NetworkGetEntityKillerOfPlayer(Game.Player.Handle, ref weapon);              
@@ -50,6 +52,7 @@ namespace FGMM.Client.Services
                 int playerID = GetPlayerFromPedId(Game.PlayerPed.Handle);
 
                 Rpc.Event(ClientEvents.PlayerDied).Trigger(killerId);
+                await BaseScript.Delay(3000);
             }
             else if(!API.IsPedDeadOrDying(Game.PlayerPed.Handle, true))
             {

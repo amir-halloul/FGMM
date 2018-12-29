@@ -34,7 +34,7 @@ namespace FGMM.Client
 
             TeamSelectionService teamSelectionService = new TeamSelectionService(new Logger("TeamSelectionService"), EventManager, new RpcHandler(), EventHandlers);
             GamemodeService gamemodeService = new GamemodeService(new Logger("GamemodeService"), EventManager, new RpcHandler());
-            GameEventsService gameEventsService = new GameEventsService(new Logger("GameEventsService"), EventManager, new RpcHandler(), TickManager);
+            //GameEventsService gameEventsService = new GameEventsService(new Logger("GameEventsService"), EventManager, new RpcHandler(), TickManager);
             DisableAIService disableAIService = new DisableAIService(new Logger("DisableAIService"), EventManager, new RpcHandler(), TickManager);
 
             Logger.Info("Client Inizialized!");
