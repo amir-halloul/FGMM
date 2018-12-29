@@ -73,9 +73,9 @@ namespace FGMM.Client.Services
             Game.Player.CanControlCharacter = false;
             Game.PlayerPed.IsPositionFrozen = true;
             API.ClearPedTasksImmediately(Game.PlayerPed.Handle);
+
             Screen.Hud.IsRadarVisible = false;
-            Screen.Hud.IsVisible = false;
-            API.DisplayHud(false);
+
             Screen.Fading.FadeOut(2000);
         }
 

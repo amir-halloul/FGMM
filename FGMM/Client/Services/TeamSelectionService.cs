@@ -83,8 +83,6 @@ namespace FGMM.Client.Services
 
             // HUD stuff
             Screen.Hud.IsRadarVisible = false;
-            Screen.Hud.IsVisible = false;
-            API.DisplayHud(false);
 
             while (!API.HasCollisionLoadedAroundEntity(Game.PlayerPed.Handle))
                 await BaseScript.Delay(100);
@@ -146,10 +144,11 @@ namespace FGMM.Client.Services
                 if(!response)
                 {
                     // TODO: Add visual feedback
+                    Screen.ShowNotification("The team your are trying to join is full!");
                     IsAwaitingSpawn = false;
                 }
                 else
-                    ToggleSelectionScreenNui(false);
+                    ToggleSelectionScreenNui(false);                   
             }
         }
 

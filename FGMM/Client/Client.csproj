@@ -47,7 +47,6 @@
     <Compile Include="Events\TickManager.cs" />
     <Compile Include="Models\Pools.cs" />
     <Compile Include="Services\DisableAIService.cs" />
-    <Compile Include="Services\GameEventsService.cs" />
     <Compile Include="Services\GamemodeService.cs" />
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Main.cs" />

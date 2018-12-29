@@ -11,22 +11,21 @@ namespace FGMM.SDK.Core.Models
         public List<Position> SpawnPoints { get; set; }
         public List<Weapon> Loadout { get; set; }
 
-        [JsonIgnore]
-        private Random Rng { get; set; }
-
         public Team()
         {
-            Rng = new Random();
+            
         }
 
         public Position GetRandomSpawnPoint()
         {
+            Random Rng = new Random();
             int point = Rng.Next(SpawnPoints.Count);
             return SpawnPoints[point];
         }
 
         public string GetRandomSkin()
         {
+            Random Rng = new Random();
             int skin = Rng.Next(Skins.Count);
             return Skins[skin];
         }
