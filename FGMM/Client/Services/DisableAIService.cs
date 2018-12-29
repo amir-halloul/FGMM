@@ -16,12 +16,12 @@ namespace FGMM.Client.Services
 {
     class DisableAIService : Service
     {
-        public DisableAIService(ILogger logger, IEventManager events, IRpcHandler rpc, ITickManager tick) : base(logger, events, rpc)
+        public DisableAIService(ILogger logger, IEventManager events, IRpcHandler rpc, ITickManager tickManager) : base(logger, events, rpc, tickManager)
         {
             logger.Info("DisableAI Service started!");
             Rpc.Event(ClientEvents.CleanupPeds).On(OnPedCleanupRequest);
-            tick.Attach(DisableAITick);
-            tick.Attach(CleanupPedsTick);
+            TickManager.Attach(DisableAITick);
+            TickManager.Attach(CleanupPedsTick);
         }
 
         private async Task CleanupPedsTick()
@@ -56,6 +56,7 @@ namespace FGMM.Client.Services
             API.SetParkedVehicleDensityMultiplierThisFrame(0.0f);
             API.SetScenarioPedDensityMultiplierThisFrame(0.0f, 0.0f);
             API.SetSomeVehicleDensityMultiplierThisFrame(0.0f);
+            await Task.FromResult(0);
         }
     }
 }

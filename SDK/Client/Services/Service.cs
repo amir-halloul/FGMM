@@ -12,12 +12,14 @@ namespace FGMM.SDK.Client.Services
         protected ILogger Logger { get; set; }
         protected IEventManager Events { get; set; }
         protected IRpcHandler Rpc { get; set; }
+        protected ITickManager TickManager { get; set; }
 
-        public Service(ILogger logger, IEventManager events, IRpcHandler rpc)
+        public Service(ILogger logger, IEventManager events, IRpcHandler rpc, ITickManager tickManager)
         {
             Logger = logger;
             Events = events;
             Rpc = rpc;
+            TickManager = tickManager;
             Started();
         }
 

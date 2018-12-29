@@ -24,7 +24,7 @@ namespace FGMM.Client.Services
         private string CurrentGamemode;
         private IGamemode Gamemode;
 
-        public GamemodeService(ILogger logger, IEventManager events, IRpcHandler rpc) : base(logger, events, rpc) { }
+        public GamemodeService(ILogger logger, IEventManager events, IRpcHandler rpc, ITickManager tickManager) : base(logger, events, rpc, tickManager) { }
 
         public override async Task Started()
         {
@@ -97,7 +97,8 @@ namespace FGMM.Client.Services
             {
                 new Logger($"{gamemode}Gamemode"),
                 Events,
-                Rpc
+                Rpc,
+                TickManager
             };
 
             IGamemode gamemodeInstance = (IGamemode)Activator.CreateInstance(type, ctorArgs.ToArray());

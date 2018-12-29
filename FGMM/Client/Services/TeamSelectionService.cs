@@ -26,7 +26,7 @@ namespace FGMM.Client.Services
         private Camera Camera { get; set; }
         private UIManager UIManager { get; set; }
 
-        public TeamSelectionService(ILogger logger, IEventManager events, IRpcHandler rpc, EventHandlerDictionary eventDict) : base(logger, events, rpc)
+        public TeamSelectionService(ILogger logger, IEventManager events, IRpcHandler rpc, ITickManager tickManager, EventHandlerDictionary eventDict) : base(logger, events, rpc, tickManager)
         {
             UIManager = new UIManager(eventDict);
 
@@ -38,7 +38,7 @@ namespace FGMM.Client.Services
             UIManager.RegisterNUICallback("spawnplayer", NUI_OnSpawnRequest);
         }
 
-        private void OnMissionEndRequested(IRpcEvent obj)
+        private void OnMissionEndRequested(IRpcEvent rpc)
         {
             ToggleSelectionScreenNui(false);
         }
@@ -58,7 +58,7 @@ namespace FGMM.Client.Services
             API.ShutdownLoadingScreen();
             API.ShutdownLoadingScreenNui();
 
-            Screen.Fading.FadeOut(1);
+            Screen.Fading.FadeOut(0);
 
             while (!await Game.Player.ChangeModel(new Model((PedHash)Enum.Parse(typeof(PedHash), data.Skins[SelectedTeam], true)))) await BaseScript.Delay(100);
             API.SetPedDefaultComponentVariation(Game.PlayerPed.Handle);
