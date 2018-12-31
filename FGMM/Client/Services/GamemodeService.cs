@@ -70,13 +70,24 @@ namespace FGMM.Client.Services
                 Gamemode = null;
             }
 
+            API.SetPlayerTeam(Game.Player.Handle, -1);
             Game.Player.CanControlCharacter = false;
             Game.PlayerPed.IsPositionFrozen = true;
-            API.ClearPedTasksImmediately(Game.PlayerPed.Handle);
+            if(!Game.PlayerPed.IsDead)
+                API.ClearPedTasksImmediately(Game.PlayerPed.Handle);
 
-            Screen.Hud.IsRadarVisible = false;
+            Screen.Fading.FadeOut(1000);
+            while (Screen.Fading.IsFadingOut)
+                await BaseScript.Delay(100);
 
-            Screen.Fading.FadeOut(2000);
+            API.SetCloudHatOpacity(0.01f);
+
+            if (!API.IsPlayerSwitchInProgress())
+                API.SwitchOutPlayer(API.PlayerPedId(), 0, 1);
+            while (API.GetPlayerSwitchState() != 5)
+                await BaseScript.Delay(50);
+
+            Screen.Fading.FadeIn(1000);
         }
 
         private async Task<string> RequestGamemode()

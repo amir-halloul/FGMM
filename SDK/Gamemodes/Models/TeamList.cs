@@ -15,7 +15,7 @@ namespace FGMM.SDK.Gamemodes.Models
 
         public Team GetWinningTeam()
         {
-            Team team = Teams.OrderBy(s => s.Score).FirstOrDefault();
+            Team team = Teams.OrderByDescending(s => s.Score).FirstOrDefault();
             return team;
         }
 

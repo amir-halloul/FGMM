@@ -22,17 +22,21 @@ namespace FGMM.Client.Services
             Rpc.Event(ClientEvents.CleanupPeds).On(OnPedCleanupRequest);
             TickManager.Attach(DisableAITick);
             TickManager.Attach(CleanupPedsTick);
+
+            API.SetPoliceIgnorePlayer(Game.Player.Handle, true);          
         }
 
         private async Task CleanupPedsTick()
         {
-            int pedCount = 0;
             PedsPool Peds = new PedsPool();
             foreach (Ped ped in Peds)
-            {
-                pedCount++;
-                if (!ped.IsPlayer)
+            {                
+                if (!ped.IsPlayer || !API.NetworkIsPlayerActive(API.NetworkGetPlayerIndexFromPed(ped.Handle)))
+                {
+                    if (ped.IsInVehicle())
+                        ped.CurrentVehicle?.Delete();
                     ped.Delete();
+                }                  
             }
             await Delay(1000);
         }
@@ -43,7 +47,7 @@ namespace FGMM.Client.Services
             PedsPool Peds = new PedsPool();
             foreach (Ped ped in Peds)
             {
-                if (!ped.IsPlayer)
+                if (!ped.IsPlayer || !API.NetworkIsPlayerActive(API.NetworkGetPlayerIndexFromPed(ped.Handle)))
                     ped.Delete();
             }
         }
@@ -56,6 +60,8 @@ namespace FGMM.Client.Services
             API.SetParkedVehicleDensityMultiplierThisFrame(0.0f);
             API.SetScenarioPedDensityMultiplierThisFrame(0.0f, 0.0f);
             API.SetSomeVehicleDensityMultiplierThisFrame(0.0f);
+
+            Game.Player.WantedLevel = 0;
             await Task.FromResult(0);
         }
     }

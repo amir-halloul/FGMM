@@ -51,15 +51,16 @@ namespace FGMM.Client.Services
 
             Data = data;
 
-            API.SetPlayerTeam(Game.Player.Handle, SelectedTeam);
+            API.SetPlayerTeam(Game.Player.Handle, -1);
+
             API.NetworkSetFriendlyFireOption(true);
             API.SetCanAttackFriendly(Game.PlayerPed.Handle, true, false);
 
             API.ShutdownLoadingScreen();
-            API.ShutdownLoadingScreenNui();
 
             Screen.Fading.FadeOut(0);
 
+            API.SwitchInPlayer(API.PlayerPedId());
             while (!await Game.Player.ChangeModel(new Model((PedHash)Enum.Parse(typeof(PedHash), data.Skins[SelectedTeam], true)))) await BaseScript.Delay(100);
             API.SetPedDefaultComponentVariation(Game.PlayerPed.Handle);
 
@@ -148,7 +149,11 @@ namespace FGMM.Client.Services
                     IsAwaitingSpawn = false;
                 }
                 else
-                    ToggleSelectionScreenNui(false);                   
+                {
+                    ToggleSelectionScreenNui(false);
+                    API.SetPlayerTeam(Game.Player.Handle, SelectedTeam);
+                }
+                            
             }
         }
 
