@@ -176,7 +176,7 @@ namespace FGMM.Client.RPC
             {
                 var message = this.serializer.Deserialize<InboundMessage>(json);
 
-                this.logger.Debug($"Received {message.Event} with {message.Payloads.Count} payloads(s)");
+                this.logger.Debug($"Received {message.Event} with {message.Payloads.Count} payload(s)");
 
                 tcs.SetResult(message);
             });
@@ -202,7 +202,7 @@ namespace FGMM.Client.RPC
                 var message = this.serializer.Deserialize<InboundMessage>(json);
                 message.Received = DateTime.UtcNow;
 
-                this.logger.Debug($"Received {message.Event} with {message.Payloads.Count} payloads(s)");
+                this.logger.Debug($"Received {message.Event} with {message.Payloads.Count} payload(s)");
 
                 var rpcEvent = new RpcEvent
                 {

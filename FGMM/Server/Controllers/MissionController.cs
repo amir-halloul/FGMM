@@ -75,7 +75,6 @@ namespace FGMM.Server.Controllers
 
         public async Task StopMission()
         {
-            Logger.Debug("StopMission called");
             if (CurrentGamemode == null)
                 return;
 
@@ -92,7 +91,6 @@ namespace FGMM.Server.Controllers
 
         public void StartNextMission()
         {
-            Logger.Debug("StartNextMission called");
             // Pick a mission
             string mission = Missions.Pop();
             string missionGamemode = GetMissionGamemode(mission);
@@ -107,11 +105,11 @@ namespace FGMM.Server.Controllers
             CurrentGamemode = missionGamemode;
             Gamemodes[CurrentGamemode].Start(mission);
 
-            Rpc.Event(ServerEvents.MissionStarted).Trigger(missionGamemode);
-            Events.Raise(ServerEvents.MissionStarted, Gamemodes[CurrentGamemode]);
-
             API.SetGameType(CurrentGamemode);
             API.SetMapName(Gamemodes[CurrentGamemode].Mission.Name);
+
+            Events.Raise(ServerEvents.MissionStarted, Gamemodes[CurrentGamemode]);
+            Rpc.Event(ServerEvents.MissionStarted).Trigger(missionGamemode);           
         }
 
         private IGamemode LoadGamemode(string gamemode)

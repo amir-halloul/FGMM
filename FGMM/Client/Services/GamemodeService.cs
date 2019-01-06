@@ -51,11 +51,11 @@ namespace FGMM.Client.Services
             do
             {
                 CurrentGamemode = await RequestGamemode();
-                await Delay(2000);
+                await BaseScript.Delay(2000);
             }
             while (string.IsNullOrEmpty(CurrentGamemode));
 
-            Gamemode = GetGamemode(CurrentGamemode);
+            Gamemode = GetGamemode(CurrentGamemode);           
             Events.Raise(ClientEvents.StartTeamSelection, await Rpc.Event(ClientEvents.RequestTeamSelection).Request<SelectionData>());
         }
 
@@ -71,6 +71,7 @@ namespace FGMM.Client.Services
             }
 
             API.SetPlayerTeam(Game.Player.Handle, -1);
+
             Game.Player.CanControlCharacter = false;
             Game.PlayerPed.IsPositionFrozen = true;
             if(!Game.PlayerPed.IsDead)
@@ -98,7 +99,11 @@ namespace FGMM.Client.Services
         private IGamemode GetGamemode(string gamemode)
         {
             if (Gamemodes.ContainsKey(gamemode))
+            {
+                Gamemodes[gamemode].Start();
                 return Gamemodes[gamemode];
+            }
+                
 
             string AssemblyName = $"FGMM.Gamemode.{gamemode}.Client.net";
             Assembly assembly = AppDomain.CurrentDomain.GetAssemblies().Where(a => a.GetName().Name == AssemblyName).FirstOrDefault();
@@ -114,7 +119,7 @@ namespace FGMM.Client.Services
 
             IGamemode gamemodeInstance = (IGamemode)Activator.CreateInstance(type, ctorArgs.ToArray());
             Gamemodes.Add(gamemode, gamemodeInstance);
-
+            gamemodeInstance.Start();
             return gamemodeInstance;
         }
     }

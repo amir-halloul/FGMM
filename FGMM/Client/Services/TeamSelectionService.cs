@@ -56,9 +56,16 @@ namespace FGMM.Client.Services
             API.NetworkSetFriendlyFireOption(true);
             API.SetCanAttackFriendly(Game.PlayerPed.Handle, true, false);
 
+            API.SetManualShutdownLoadingScreenNui(true);
+
             API.ShutdownLoadingScreen();
 
+            API.ShutdownLoadingScreenNui();
+
             Screen.Fading.FadeOut(0);
+
+            API.NetworkSetInMpCutscene(true, false);
+            API.SetLocalPlayerVisibleInCutscene(true, true);
 
             API.SwitchInPlayer(API.PlayerPedId());
             while (!await Game.Player.ChangeModel(new Model((PedHash)Enum.Parse(typeof(PedHash), data.Skins[SelectedTeam], true)))) await BaseScript.Delay(100);
@@ -82,7 +89,6 @@ namespace FGMM.Client.Services
             Camera.Position = Game.PlayerPed.Position + Game.PlayerPed.ForwardVector * 2f + new Vector3(0, 0, 0.2f);
             Camera.PointAt(Game.PlayerPed.Position);
 
-            // HUD stuff
             Screen.Hud.IsRadarVisible = false;
 
             while (!API.HasCollisionLoadedAroundEntity(Game.PlayerPed.Handle))
@@ -144,7 +150,6 @@ namespace FGMM.Client.Services
                 bool response = await Rpc.Event(ClientEvents.JoinTeamRequest).Request<bool>(SelectedTeam);
                 if(!response)
                 {
-                    // TODO: Add visual feedback
                     Screen.ShowNotification("The team your are trying to join is full!");
                     IsAwaitingSpawn = false;
                 }
@@ -152,8 +157,9 @@ namespace FGMM.Client.Services
                 {
                     ToggleSelectionScreenNui(false);
                     API.SetPlayerTeam(Game.Player.Handle, SelectedTeam);
-                }
-                            
+                    API.NetworkSetInMpCutscene(false, false);
+                    Screen.Hud.IsRadarVisible = true;             
+                }                          
             }
         }
 

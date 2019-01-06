@@ -18,5 +18,11 @@ namespace FGMM.SDK.Server.RPC
         /// </summary>
         /// <param name="payloads">The payloads to send with the event.</param>
         void Trigger(Player player, params object[] payloads);
+
+        /// <summary>
+        /// Triggers the event with the specified payloads for one client
+        /// </summary>
+        /// <param name="payloads">The payloads to send with the event.</param>
+        void Trigger(IClient client, params object[] payloads);
     }
 }

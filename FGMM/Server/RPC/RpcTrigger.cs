@@ -17,8 +17,10 @@ namespace FGMM.Server.RPC
 
         public void Fire(OutboundMessage message)
         {
-            this.logger.Debug($"Fire: \"{message.Event}\" with {message.Payloads.Count} payload(s): {string.Join(", ", message.Payloads)}");
-
+            if(message.Target == null)
+                this.logger.Debug($"Fire: \"{message.Event}\" with {message.Payloads.Count} payload(s): {string.Join(", ", message.Payloads)} to everyone");
+            else
+                this.logger.Debug($"Fire: \"{message.Event}\" with {message.Payloads.Count} payload(s): {string.Join(", ", message.Payloads)} to {message.Target?.Name}");
             if (message.Target != null)
             {
                 new PlayerList()[message.Target.Handle].TriggerEvent(message.Event, this.serializer.Serialize(message));
